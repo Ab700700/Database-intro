@@ -1,0 +1,83 @@
+
+ # 1, 2, 3 and bouns
+create database store;
+
+create table countries(
+    name varchar(20) unique ,
+    continent_name varchar(20) not null ,
+    code int primary key
+);
+
+create table users(
+    id int primary key ,
+    full_name varchar(20),
+    email varchar(20) unique ,
+    gender char(1) check ( gender ='m' || gender = 'f' ),
+    date_of_birth varchar(15),
+    created_at datetime default CURRENT_TIMESTAMP(),
+    country_code int,
+    foreign key (country_code) references countries(code)
+);
+
+create table orders(
+    id int primary key ,
+    status varchar(6) check ( status = 'start'|| status = 'finish' ),
+    created_at datetime default current_timestamp(),
+    user_id int,
+    foreign key (user_id) references  users(id)
+);
+
+create table order_products(
+    order_id int,
+    product_id int  ,
+    quantity int default  0,
+    foreign key (order_id) references orders(id),
+    foreign key (product_id) references products(id),
+    primary key (order_id,product_id)
+);
+
+
+create table products(
+    id int primary key ,
+    name varchar(10) not null ,
+    price int default 0,
+    status varchar(10) check ( status= 'valid'|| status = 'expired' ),
+    created_at datetime default CURRENT_TIMESTAMP()
+);
+
+ # 4
+insert into countries values('Saudi arabia','Asia',1);
+insert into countries values('Kuwait','Asia',2);
+insert into countries values('UAE','Asia',3);
+insert into countries values('Italy','Europe',4);
+
+insert into users(id,full_name,email,gender,date_of_birth,country_code) values(1,'ahmad','ahmad@mail.com','m','1980/9/9',1);
+insert into users(id,full_name,email,gender,date_of_birth,country_code) values(2,'ali','ali@mail.com','m','1985/9/9',1);
+insert into users(id,full_name,email,gender,date_of_birth,country_code) values(3,'abdullah','abdull@mail.com','m','1990/10/9',3);
+insert into users(id,full_name,email,gender,date_of_birth,country_code) values(4,'nora','nora@mail.com','f','2000/5/10',2);
+
+insert into orders (id,user_id,status) values(1,1,'start');
+insert into orders (id,user_id,status) values(2,1,'start');
+insert into orders (id,user_id,status) values(3,2,'finish');
+insert into orders (id,user_id,status) values(4,4,'start');
+
+
+insert into products (id,name,price,status) values (1,'phone',3000,'valid');
+insert into products (id,name,price,status) values (2,'table',500,'valid');
+insert into products (id,name,price,status) values (3,'computer',2900,'expired');
+insert into products (id,name,price,status) values (4,'chair',300,'valid');
+insert into products (id,name,price,status) values (5,'cup',30,'valid');
+
+
+insert into order_products values (1,2,10);
+insert into order_products values (2,1,5);
+insert into order_products values (3,3,8);
+insert into order_products values (4,4,14);
+
+
+update countries set name = 'Germany' where code = 4;
+
+
+delete from products where id = 5;
+
+
